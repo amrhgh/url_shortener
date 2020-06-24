@@ -8,9 +8,7 @@ from users.models import CustomUser
 from users.views import CustomTokenObtainPairView
 
 
-
-
-class ObtainJWTToken(TestCase):
+class ObtainJWTTokenTest(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
         self.path = '/token/'

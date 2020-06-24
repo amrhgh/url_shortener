@@ -1,9 +1,9 @@
 from django.db import models
 
 # Create your models here.
+from url_shortner.settings import SHORT_URL_LENGTH
 from users.models import CustomUser
 
-SHORT_URL_LENGTH = 64
 
 
 class Url(models.Model):
