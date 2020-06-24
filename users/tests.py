@@ -2,18 +2,37 @@ import json
 
 from django.test import TestCase
 
-# Create your tests here.
 from rest_framework.test import APIRequestFactory
 
 from users.views import RegisterView
 
 
 class RegisterTest(TestCase):
-    def test_register_new_user_not_email_found(self):
-        factory = APIRequestFactory()
-        request = factory.post('/register/', json.dumps({'username': 'foo', 'password': 'fooooooo'}),
-                               content_type='application/json')
-        view = RegisterView.as_view()
+    def setUp(self):
+        self.factory = APIRequestFactory()
+        self.register_path = '/register/'
+        self.view = RegisterView.as_view()
 
-        response = view(request)
+    def test_register_new_user_not_email_found(self):
+        data = json.dumps({'username': 'foo', 'password': 'fooooooo'})
+        request = self.factory.post(self.register_path, data=data,
+                                    content_type='application/json')
+        response = self.view(request)
+        self.assertIn('email', response.data)
+
+    def test_register_new_user_with_correct_data(self):
+        data = json.dumps({'email': 'foo@gmail.com', 'username': 'foo', 'password': 'fooooooo'})
+        request = self.factory.post(self.register_path, data=data,
+                                    content_type='application/json')
+        response = self.view(request)
+        self.assertEqual(201, response.status_code)
+
+    def test_register_new_user_with_pre_existing_email(self):
+        data = json.dumps({'email': 'new@gmail.com', 'username': 'new', 'password': 'foooooooo'})
+        request = self.factory.post(self.register_path, data=data,
+                                    content_type='application/json')
+        self.view(request)  # create new user
+        request = self.factory.post(self.register_path, data=data,
+                                    content_type='application/json')
+        response = self.view(request)
         self.assertIn('email', response.data)

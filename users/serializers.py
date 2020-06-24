@@ -5,7 +5,6 @@ from users.models import CustomUser
 
 class RegisterSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
-        breakpoint()
         new_user = CustomUser(
             email=self.validated_data['email'],
             username=self.validated_data['username'],
@@ -16,7 +15,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = '__all__'
+        fields = ['username', 'email', 'password']
         extra_kwargs = {
             'password': {'write_only': True},
         }
