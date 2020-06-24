@@ -3,11 +3,9 @@ import json
 from django.test import TestCase
 
 from rest_framework.test import APIRequestFactory
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import CustomUser
-from users.views import RegisterView, CustomTokenObtainPairView
-
+from users.views import CustomTokenObtainPairView
 
 
 
