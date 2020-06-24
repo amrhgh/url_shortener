@@ -1,14 +1,14 @@
 from django.shortcuts import render
 
 # Create your views here.
+from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.viewsets import ModelViewSet
 
 from urls.models import Url
 from urls.serializers import UrlSerializer
 
 
-class UrlView(ModelViewSet):
+class UrlView(CreateAPIView):
     permission_classes = [IsAuthenticated, ]
 
     serializer_class = UrlSerializer

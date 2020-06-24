@@ -14,10 +14,11 @@ class UrlViewTest(TestCase):
         self.factory = APIRequestFactory()
         self.path = '/urls/'
 
-    # def test_create_new_url_record_without_suggested_url(self):
-    #     view = UrlView.as_view({'post': 'create'})
-    #     data = json.dumps({'long_url': 'https://google.com'})
-    #     request = self.factory.post(self.path, data=data,
-    #                                 content_type='application/json')
-    #     force_authenticate(request, self.user)
-    #     response = view(request)
+    def test_create_new_url(self):
+        view = UrlView.as_view()
+        data = json.dumps({'long_url': 'https://google.com'})
+        request = self.factory.post(self.path, data=data,
+                                    content_type='application/json')
+        force_authenticate(request, self.user)
+        response = view(request)
+        self.assertEqual(201, response.status_code)

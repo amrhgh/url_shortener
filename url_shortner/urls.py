@@ -19,10 +19,10 @@ from rest_framework.routers import DefaultRouter
 
 from urls.views import UrlView
 
-router = DefaultRouter()
-router.register(r'urls', UrlView, basename='urls')
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
-] + router.urls
+    path('urls/', UrlView.as_view())
+]

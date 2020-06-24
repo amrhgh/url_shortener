@@ -11,13 +11,18 @@ ALPHA_NUMBERS = string.ascii_letters + string.digits
 
 class UrlSerializer(serializers.ModelSerializer):
     suggested_path = serializers.CharField(max_length=SHORT_URL_LENGTH, write_only=True, required=False)
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    def create(self, validated_data):
-        pass
+    def save(self):
+        short_url_path = generate_random_string(self.validated_data.get('suggested_path'))
+        obj = Url.objects.create(short_url_path=short_url_path, long_url=self.validated_data.get('long_url'),
+                                 owner=self.validated_data.get('user'))
+        return obj
+
 
     class Meta:
         model = Url
-        fields = ['short_url_path', 'long_url', 'suggested_path']
+        fields = ['short_url_path', 'long_url', 'suggested_path', 'user']
         read_only_fields = ['short_url_path', ]
 
 
