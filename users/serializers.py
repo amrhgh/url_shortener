@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from users.models import CustomUser
 
@@ -19,3 +20,19 @@ class RegisterSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True},
         }
+
+
+class CustomJWTSerializer(TokenObtainPairSerializer):
+    """
+    serializer validator is changed to support login with email
+    """
+    def validate(self, attrs):
+        credentials = {
+            'username': '',
+            'password': attrs.get("password")
+        }
+        user_obj = CustomUser.objects.filter(email=attrs.get("username")).first() or CustomUser.objects.filter(
+            username=attrs.get("username")).first()
+        if user_obj:
+            credentials['username'] = user_obj.username
+        return super().validate(credentials)
