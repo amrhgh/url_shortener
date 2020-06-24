@@ -22,6 +22,6 @@ from urls.views import UrlView, Redirect
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
-    path('urls/', UrlView.as_view()),
-    path('r/<str:path>', Redirect.as_view())
+    path('urls/', UrlView.as_view(), name='urls'),
+    path('r/<str:path>', Redirect.as_view(), name='redirect')
 ]

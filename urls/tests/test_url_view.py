@@ -1,6 +1,7 @@
 import json
 
 from django.test import TestCase
+from django.urls import reverse
 from rest_framework.test import APIRequestFactory, force_authenticate
 
 from urls.views import UrlView
@@ -12,7 +13,7 @@ class UrlViewTest(TestCase):
         data = {'email': 'foo@gmail.com', 'username': 'foo', 'password': 'foooooooo'}
         self.user = CustomUser.objects.create(**data)
         self.factory = APIRequestFactory()
-        self.path = '/urls/'
+        self.path = reverse('urls')
 
     def test_create_new_url(self):
         view = UrlView.as_view()

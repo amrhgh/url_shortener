@@ -1,6 +1,7 @@
 import json
 
 from django.test import TestCase
+from django.urls import reverse
 
 from rest_framework.test import APIRequestFactory
 
@@ -11,7 +12,7 @@ from users.views import RegisterView
 class RegisterTest(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.path = '/register/'
+        self.path = reverse('register')
         self.view = RegisterView.as_view()
 
     def test_register_new_user_not_email_found(self):

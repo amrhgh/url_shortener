@@ -1,6 +1,7 @@
 import json
 
 from django.test import TestCase
+from django.urls import reverse
 
 from rest_framework.test import APIRequestFactory
 
@@ -11,7 +12,7 @@ from users.views import CustomTokenObtainPairView
 class ObtainJWTTokenTest(TestCase):
     def setUp(self):
         self.factory = APIRequestFactory()
-        self.path = '/token/'
+        self.path = reverse('token_obtain_pair')
         self.view = CustomTokenObtainPairView.as_view()
         self.create_new_user()
 
