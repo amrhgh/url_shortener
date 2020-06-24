@@ -17,12 +17,11 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from urls.views import UrlView
-
-
+from urls.views import UrlView, Redirect
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
-    path('urls/', UrlView.as_view())
+    path('urls/', UrlView.as_view()),
+    path('r/<str:path>', Redirect.as_view())
 ]
