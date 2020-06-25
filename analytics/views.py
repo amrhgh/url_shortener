@@ -3,9 +3,7 @@ from django.shortcuts import render
 
 # Create your views here.
 from rest_framework import viewsets
-from rest_framework.generics import GenericAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 
 from analytics.models import Analytic
 from analytics.serializers import AnalyticListSerializer, AnalyticDetailSerializer

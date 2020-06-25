@@ -26,22 +26,30 @@ redis_instance = redis.StrictRedis(host=settings.REDIS_HOST,
 
 
 @periodic_task(run_every=(timedelta(seconds=3)), ignore_result=False)
-def debug_task():
+def collect_redirect_data():
+    """
+        this function is run periodically and async by celery beat
+        read redirect data queue, clear it and store data in database
+    """
     queue = redis_instance.lrange("data_flow", 0, -1)
     redis_instance.delete("data_flow")
-    dic_records = process_data_from_queue(queue)
-    for key, value in dic_records.items():
+    records = process_data_from_queue(queue)
+    for key, value in records.items():  # add all records to database one by one
         url = Url.objects.get(short_url_path=key)
         date = str(datetime.today().date())
         analytic = Analytic.objects.filter(url=url).first()
         if not analytic:
             analytic = Analytic.objects.create(url=url, records={})
             analytic.records[date] = dict()
-        merge(analytic.records[date], dic_records[key])
+        merge(analytic.records[date], records[key])
         analytic.save()
 
 
 def process_data_from_queue(queue):
+    """
+    in storing redirect data in queue, priority was given to speed and data is out of shape
+    here data format has changed before storing data in database
+    """
     new_requests_analytics = dict()
     for item in queue:
         item = eval(item)
@@ -57,9 +65,6 @@ def process_data_from_queue(queue):
         browser.setdefault(item.get('browser'), []).append(item.get('ip'))
         device_type = 'pc' if item.get('is_pc') else 'phone/tablet'
         device.setdefault(device_type, []).append(item.get('ip'))
-    # dic_records = dict()
-    # dic_records_with_unique_ip = dict()
-    # create_records_dictionaries(new_requests_analytics, dic_records, dic_records_with_unique_ip)
     return new_requests_analytics
 
 
