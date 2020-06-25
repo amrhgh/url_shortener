@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('users.urls')),
     path('urls/', UrlView.as_view(), name='urls'),
-    path('r/<str:path>', Redirect.as_view(), name='redirect')
+    path('r/<str:path>', Redirect.as_view(), name='redirect'),
+    path('analytics/', include('analytics.urls'))
 ]
 
 from analytics.celery import app as celery_app

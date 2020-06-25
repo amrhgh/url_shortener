@@ -26,7 +26,7 @@ class UrlView(CreateAPIView):
     serializer_class = UrlSerializer
 
     def get_queryset(self):
-        user = get_user(self.request)
+        user = self.request.user
         return Url.objects.filter(owner=user)
 
 
