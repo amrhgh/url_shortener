@@ -12,10 +12,13 @@ def merge(a, b, path=None):
     return a
 
 
-def count_list_items_in_reports(orig_dic, dic_records):
+def count_list_items_in_reports(orig_dic, dic_records, unique=False):
     for key in orig_dic:
         if isinstance(orig_dic[key], dict):
             dic_records[key] = dict()
-            count_list_items_in_reports(orig_dic[key], dic_records[key])
+            count_list_items_in_reports(orig_dic[key], dic_records[key], unique)
         else:
-            dic_records[key] = len(orig_dic[key])
+            if unique:
+                dic_records[key] = len(set(orig_dic[key]))
+            else:
+                dic_records[key] = len(orig_dic[key])
