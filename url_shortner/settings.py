@@ -136,3 +136,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 SHORT_URL_LENGTH = 8
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+CACHE_TTL = 60 * 15
