@@ -1,5 +1,6 @@
 import redis
 from django.conf import settings
+from django.contrib.auth import get_user
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.shortcuts import render, redirect
 
@@ -25,7 +26,7 @@ class UrlView(CreateAPIView):
     serializer_class = UrlSerializer
 
     def get_queryset(self):
-        user = self.request.user
+        user = get_user(self.request)
         return Url.objects.filter(owner=user)
 
 
