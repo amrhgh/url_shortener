@@ -8,4 +8,3 @@ from urls.models import Url
 class Analytic(models.Model):
     url = models.OneToOneField(to=Url, on_delete=models.CASCADE)
     records = JSONField()
-    records_unique_user = JSONField()
