@@ -15,7 +15,7 @@ class RedirectTest(TestCase):
 
     def test_redirect_path_not_found(self):
         request = self.factory.get(self.path)
-        response = self.view(request, 'shorturl')
+        response = self.view(request, 'shortirl')
         self.assertEqual(404, response.status_code)
 
     def test_redirect_path_found(self):

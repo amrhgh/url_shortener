@@ -4,11 +4,13 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.shortcuts import render, redirect
 
 # Create your views here.
+from django.utils.decorators import decorator_from_middleware
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 
+from urls.middleware import DataStreamQueue
 from urls.models import Url
 from urls.serializers import UrlSerializer
 
@@ -28,21 +30,23 @@ class UrlView(CreateAPIView):
 
 
 class Redirect(APIView):
+    @decorator_from_middleware(DataStreamQueue)
     def get(self, request, path):
-        if url := self.find_long_url(path):
+        if (url := self.find_long_url(path)) != '':
             return redirect(url)
         else:
             raise NotFound(detail='short url not found')
 
     def find_long_url(self, path):
         value = redis_instance.get(path)
-        if value:
+        if value:  # if key/value cached by redis
             return value.decode()
         url = Url.objects.filter(short_url_path=path).first()
         if url:
             redis_instance.set(path, url.long_url)
             return url.long_url
-        return None
+        redis_instance.set(path, '')
+        return ''
 
 
 
