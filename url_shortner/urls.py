@@ -25,3 +25,5 @@ urlpatterns = [
     path('urls/', UrlView.as_view(), name='urls'),
     path('r/<str:path>', Redirect.as_view(), name='redirect')
 ]
+
+from analytics.celery import app as celery_app
