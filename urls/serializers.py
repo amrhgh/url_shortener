@@ -31,8 +31,8 @@ class UrlSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Url
-        fields = ['short_url_path', 'long_url', 'suggested_path', 'user']
-        read_only_fields = ['short_url_path', ]
+        fields = ['id', 'short_url_path', 'long_url', 'suggested_path', 'user']
+        read_only_fields = ['id', 'short_url_path', ]
 
 
 def generate_random_string(suggested_path=None, length=SHORT_URL_LENGTH):
@@ -44,7 +44,7 @@ def generate_random_string(suggested_path=None, length=SHORT_URL_LENGTH):
             if not obj:
                 # if path is not used before
                 return path
-            index = random.randint(0, length)
+            index = random.randint(0, length - 1)
             new_char = random.choice(ALPHA_NUMBERS)
             path = path[:index] + new_char + path[index + 1:]  # replace a character with random character
 
