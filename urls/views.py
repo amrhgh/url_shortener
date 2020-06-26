@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.utils.decorators import decorator_from_middleware
+from rest_framework import mixins
 from rest_framework.exceptions import NotFound
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
@@ -20,7 +21,7 @@ redis_instance = redis.StrictRedis(host=settings.REDIS_HOST,
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
-class UrlView(CreateAPIView):
+class UrlView(CreateAPIView, mixins.ListModelMixin):
     permission_classes = [IsAuthenticated, ]
 
     serializer_class = UrlSerializer
@@ -28,6 +29,9 @@ class UrlView(CreateAPIView):
     def get_queryset(self):
         user = self.request.user
         return Url.objects.filter(owner=user)
+
+    def get(self, request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
 
 
 class Redirect(APIView):

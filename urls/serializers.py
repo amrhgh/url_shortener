@@ -46,7 +46,7 @@ def generate_random_string(suggested_path=None, length=SHORT_URL_LENGTH):
                 return path
             index = random.randint(0, length)
             new_char = random.choice(ALPHA_NUMBERS)
-            path = path[:index] + new_char + path[index:]  # replace a character with random character
+            path = path[:index] + new_char + path[index + 1:]  # replace a character with random character
 
     else:
         # if user doesn't suggest path a random string is generated

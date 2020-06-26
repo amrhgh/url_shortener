@@ -40,6 +40,7 @@ def collect_redirect_data():
         analytic = Analytic.objects.filter(url=url).first()
         if not analytic:
             analytic = Analytic.objects.create(url=url, records={})
+        if date not in analytic.records:
             analytic.records[date] = dict()
         merge(analytic.records[date], records[key])
         analytic.save()

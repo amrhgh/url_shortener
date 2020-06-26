@@ -18,6 +18,8 @@ class AnalyticDetailView(viewsets.ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             if hasattr(self, 'detail_serializer_class'):
                 return self.detail_serializer_class
+        else:
+            return self.serializer_class
 
     def get_queryset(self):
         user = self.request.user
